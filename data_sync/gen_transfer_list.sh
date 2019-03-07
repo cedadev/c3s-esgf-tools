@@ -5,8 +5,7 @@
 #   gen_transfer_list.sh <project> <mapfile_list> <transfer_list>
 #
 # Takes a list of mapfiles, and creates a transfer list in the format 
-# required by globus-url-copy (lines of <remote_url> <local_path>) and 
-# then writes the filename of this transfer list to standard output.
+# required by globus-url-copy (lines of <remote_url> <local_path>).
 #
 
 
