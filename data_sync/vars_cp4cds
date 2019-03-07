@@ -1,0 +1,22 @@
+url_base=gsiftp://data-xfer1.ceda.ac.uk:2811/group_workspaces/jasmin2/cp4cds1/data/c3s-cmip5
+mapfiles_url=$url_base/.mapfiles
+remote_data_root=/group_workspaces/jasmin2/cp4cds1/data/c3s-cmip5
+
+local_data_root=.......   # <======= EDIT THIS
+raw_mapfile_dir=$local_data_root/.mapfiles/orig  # verbatim copies of remote site
+edited_mapfile_dir=$local_data_root/.mapfiles/edited  # edited with local paths
+
+myproxy_server=slcs1.ceda.ac.uk
+myproxy_username=.....   # <===== EDIT THIS
+cert_max_hours=72
+cert_min_hours=6
+cert_path=$HOME/ceda.crt
+
+lists_dir=$local_data_root/.lists  # used by do_all.sh
+
+
+## Subset - uncomment for testing
+#  test_subset=c3s-cmip5/output1/NSF-DOE-NCAR/CESM1-WACCM/rcp85
+#  mapfiles_url=$mapfiles_url/$test_subset
+#  raw_mapfile_dir=$raw_mapfile_dir/$test_subset
+#  edited_mapfile_dir=$edited_mapfile_dir/$test_subset
