@@ -27,6 +27,19 @@ set_vars() {
 	exit 1
     fi
     . $file
+
+    # override the mapfile dirs for a dry run, saving the 
+    # real values in $real_<variable>
+    if [ ${dry_run-0} -eq 1 ]
+    then
+	tmp_mapfile_dir=${TMPDIR-/tmp}/mapfiles
+
+	real_raw_mapfile_dir=$raw_mapfile_dir
+	real_edited_mapfile_dir=$edited_mapfile_dir
+
+	raw_mapfile_dir=$tmp_mapfile_dir/raw
+	edited_mapfile_dir=$tmp_mapfile_dir/edited
+    fi
 }
 
 

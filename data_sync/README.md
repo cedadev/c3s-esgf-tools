@@ -19,3 +19,10 @@ Each time:
 * for each of these, create the edited mapfile. Also create a list of all the newly fetched mapfiles.
 * use the list of newly fetched mapfiles to create a list of new datafiles which need to be fetched
 * fetch these new datafiles
+
+
+For a dry run:
+
+  * do `do_all.sh --dry-run cp4cds`
+  * This will use copies of the mapfiles under `/tmp/mapfiles` (or `$TMPDIR/mapfiles`).
+  * The relevant lists will be created with a `.DRYRUN` suffix, and the new data files will not be downloaded.

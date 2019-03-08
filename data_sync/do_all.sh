@@ -2,7 +2,7 @@
 #
 # usage:
 #
-#   do_all.sh <project>
+#   do_all.sh [--dry-run] <project>
 #
 # e.g.
 #
@@ -13,6 +13,14 @@
 # generate a list of datafiles to be transferred, and then transfers these
 # data files
 
+export dry_run=0
+
+if [ "$1" == "--dry-run" ]
+then
+    dry_run=1
+    shift;
+fi
+
 project=$1
 
 scriptdir=`dirname $0`
@@ -20,14 +28,31 @@ scriptdir=`dirname $0`
 check_num_args 1 $*
 set_vars $project
 
+list_suffix=`get_timestamp`
+
+if [ $dry_run -eq 1 ]
+then
+    # With export dry_run=1, the set_vars script will have pointed the
+    # relevant mapfile_dir variables at temporary areas, with the
+    # master copies in $real_*.  Now copy the actual files.
+
+    ensure_dir $raw_mapfile_dir
+    ensure_dir $edited_mapfile_dir
+
+    echo "Dry run - using copy of mapfile dirs under $tmp_mapfile_dir"
+    rsync -a --delete $real_raw_mapfile_dir/ $raw_mapfile_dir/ 
+    rsync -a --delete $real_edited_mapfile_dir/ $edited_mapfile_dir/ 
+
+    list_suffix=$list_suffix.DRYRUN
+fi
+
 
 # 1) Sync the mapfiles
 $scriptdir/sync_mapfiles.sh $project
 
 
 # 2) Generate edited mapfiles
-timestamp=`get_timestamp`
-mapfile_list=$lists_dir/mapfile_list_$timestamp
+mapfile_list=$lists_dir/mapfile_list_$list_suffix
 $scriptdir/gen_edited_mapfiles.sh $project $mapfile_list
 echo "`wc -l < $mapfile_list` new edited mapfiles generated"
 
@@ -40,13 +65,17 @@ fi
 
 
 # 3) Generate list of URLs and destinations for transfer
-transfer_list=$lists_dir/transfer_$timestamp
+transfer_list=$lists_dir/transfer_$list_suffix
 $scriptdir/gen_transfer_list.sh $project $mapfile_list $transfer_list
 echo "`wc -l < $transfer_list` data files to transfer"
 
 
 # 4) Transfer the data files
-$scriptdir/fetch_datafiles.sh $project $transfer_list
-
+if [ $dry_run -eq 1 ]
+then
+    echo "Dry run: skipping data fetch"
+else
+    $scriptdir/fetch_datafiles.sh $project $transfer_list
+fi
 
 echo "Done"
