@@ -2,13 +2,31 @@
 #
 # usage:
 #
-#    gen_edited_mapfiles.sh <project> <output_list_file>
+#    gen_edited_mapfiles.sh [--all] <project> <output_list_file>
 #
-# For every mapfile which was synced but for which an edited mapfile does not 
-# exist, generate the edited mapfile for local publication.
+# For every raw copy of the remote mapfile, if an edited mapfile does not 
+# exist (or unconditionally if "--all" is specified), generate the edited
+# mapfile for local publication.
 #
 # Also writes a list of newly created edited mapfiles, using the filename
 # provided as <output_list_file>
+
+
+do_all=0
+
+while true
+do
+    case $1 in
+	--all)
+	    do_all=1
+	    ;;
+
+	*)
+	    break
+	    ;;
+    esac
+    shift
+done
 
 
 project=$1
@@ -34,7 +52,7 @@ do
     in_path=$raw_mapfile_dir/$relative_path
     out_path=$edited_mapfile_dir/$relative_path
 
-    if [ ! -e $out_path ]
+    if [ $do_all -eq 1 ] || [ ! -e $out_path ]
     then
 	ensure_parent_dir $out_path
 	sed "s,$remote_data_root,$local_data_root,g" $in_path > $out_path

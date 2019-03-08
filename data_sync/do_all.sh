@@ -2,7 +2,7 @@
 #
 # usage:
 #
-#   do_all.sh [--dry-run] <project>
+#   do_all.sh [--dry-run] [--rebuild] <project>
 #
 # e.g.
 #
@@ -14,12 +14,26 @@
 # data files
 
 export dry_run=0
+rebuild=0
 
-if [ "$1" == "--dry-run" ]
-then
-    dry_run=1
-    shift;
-fi
+while true
+do
+    case $1 in
+	--dry-run)
+	    dry_run=1
+	    ;;
+
+	--rebuild)
+	    rebuild=1
+	    ;;
+	
+	*)
+	    break
+	    ;;
+    esac
+    shift
+done
+
 
 project=$1
 
@@ -53,7 +67,14 @@ $scriptdir/sync_mapfiles.sh $project
 
 # 2) Generate edited mapfiles
 mapfile_list=$lists_dir/mapfile_list_$list_suffix
-$scriptdir/gen_edited_mapfiles.sh $project $mapfile_list
+
+if [ $rebuild -eq 1 ]
+then
+    $scriptdir/gen_edited_mapfiles.sh --all $project $mapfile_list
+else
+    $scriptdir/gen_edited_mapfiles.sh $project $mapfile_list
+fi
+
 echo "`wc -l < $mapfile_list` new edited mapfiles generated"
 
 if [ ! -s $mapfile_list ]

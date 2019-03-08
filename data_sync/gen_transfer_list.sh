@@ -27,12 +27,6 @@ EOF
 ensure_parent_dir $out_list
 
 
-# the xargs awk ... command writes a list of datafile paths to stdout
-
-# the perl command turns this into pairs of remote_url, local path
-# (\$foo is a variable interpreted inside perl but $bar is a variable
-# substituted in this shell script)
-
-xargs awk '{print $3}' <  $mapfile_list | \
-    perl -lne "(\$remote_url=\$_) =~ s,$local_data_root,$url_base,; \$local_url=\"file://\$_\"; print \"\$remote_url \$local_url\"" \
+xargs cat <  $mapfile_list | \
+    python $scriptdir/_gen_transfer_list.py "$local_data_root" "$url_base" \
     > $out_list
