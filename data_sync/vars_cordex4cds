@@ -1,0 +1,15 @@
+url_base=gsiftp://gridftp.ipsl.upmc.fr:2811/c3s-cordex
+mapfiles_url=$url_base/.mapfiles
+remote_data_root=/prodigfs/esgf/published/c3s-cordex
+
+local_data_root=.......   # <======= EDIT THIS
+raw_mapfile_dir=$local_data_root/.mapfiles/orig  # verbatim copies of remote site
+edited_mapfile_dir=$local_data_root/.mapfiles/edited  # edited with local paths
+
+myproxy_server=esgf-node.ipsl.upmc.fr
+myproxy_username=.....   # <===== EDIT THIS
+cert_max_hours=72
+cert_min_hours=6
+cert_path=$HOME/esgf.crt
+
+lists_dir=$local_data_root/.lists  # used by do_all.sh
