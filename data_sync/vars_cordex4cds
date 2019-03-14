@@ -1,6 +1,6 @@
 url_base=gsiftp://gridftp.ipsl.upmc.fr:2811/c3s-cordex
 mapfiles_url=$url_base/.mapfiles
-remote_data_root=c3s-cordex
+remote_data_root=/prodigfs/esgf/published/c3s-cordex
 
 local_data_root=.......   # <======= EDIT THIS
 raw_mapfile_dir=$local_data_root/.mapfiles/orig  # verbatim copies of remote site
